@@ -78,7 +78,7 @@ function Footer() {
 
   return (
     <footer
-      className="flex justify-between items-center px-10 py-8 transition-colors duration-300"
+      className="flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-0 px-6 sm:px-10 py-7 sm:py-8 transition-colors duration-300 text-center"
       style={{
         background:    'var(--black)',
         borderTop:     '1px solid var(--border)',
@@ -89,9 +89,9 @@ function Footer() {
         fontFamily:    'DM Mono, monospace',
       }}
     >
-      <span>© 2026 Warren</span>
-      <span id="footer-time">—</span>
-      <span>Full Stack Developer</span>
+      <span className="whitespace-nowrap">© 2026 Warren</span>
+      <span id="footer-time" className="whitespace-nowrap">—</span>
+      <span className="whitespace-nowrap">Full Stack Developer</span>
     </footer>
   )
 }

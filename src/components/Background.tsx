@@ -1,4 +1,83 @@
+import { useState, useEffect, useRef } from 'react'
 import TopographicBackground from './TopographicBackground'
+import ProfileCard3D from './ProfileCard3D'
+
+const BIO_WORDS = [
+  { text: "'m" },
+  { text: 'a' },
+  { text: 'Computer', bold: true },
+  { text: 'Science', bold: true },
+  { text: 'student', bold: true },
+  { text: 'who' },
+  { text: 'loves' },
+  { text: 'building' },
+  { text: 'products' },
+  { text: 'end-to-end' },
+  { text: '-' },
+  { text: 'from' },
+  { text: 'database' },
+  { text: 'schema' },
+  { text: 'design' },
+  { text: 'and' },
+  { text: 'REST/GraphQL' },
+  { text: 'APIs' },
+  { text: 'to' },
+  { text: 'polished,' },
+  { text: 'accessible' },
+  { text: 'frontends.' },
+  { text: 'I' },
+  { text: 'care' },
+  { text: 'as' },
+  { text: 'much' },
+  { text: 'about' },
+  { text: 'code' },
+  { text: 'quality' },
+  { text: 'as' },
+  { text: 'the' },
+  { text: 'final' },
+  { text: 'product.' },
+  { text: 'My' },
+  { text: 'focus' },
+  { text: 'is' },
+  { text: 'full-stack', bold: true },
+  { text: 'web', bold: true },
+  { text: 'development', bold: true },
+  { text: ',' },
+  { text: 'with' },
+  { text: 'a' },
+  { text: 'specialization' },
+  { text: 'in' },
+  { text: 'artificial', bold: true },
+  { text: 'intelligence', bold: true },
+  { text: '.' },
+  { text: 'I' },
+  { text: 'am' },
+  { text: 'comfortable' },
+  { text: 'owning' },
+  { text: 'an' },
+  { text: 'entire' },
+  { text: 'feature' },
+  { text: 'solo:' },
+  { text: 'architecture,' },
+  { text: 'implementation,' },
+  { text: 'testing,' },
+  { text: 'deployment.' },
+  { text: 'Currently' },
+  { text: 'seeking' },
+  { text: 'internship', bold: true },
+  { text: 'or', bold: true },
+  { text: 'part-time', bold: true },
+  { text: 'roles', bold: true },
+  { text: 'where' },
+  { text: 'I' },
+  { text: 'can' },
+  { text: 'ship' },
+  { text: 'real' },
+  { text: 'things' },
+  { text: 'and' },
+  { text: 'grow' },
+  { text: 'fast.' },
+]
 
 const SKILLS = [
   { title: 'Frontend', pills: ['React', 'Next.js', 'Three.js', 'Tailwind CSS', 'TypeScript', 'HTML / CSS'], accent: false },
@@ -15,6 +94,40 @@ const STATS = [
 ]
 
 export default function Background() {
+  const [isBioVisible, setIsBioVisible] = useState(false)
+  const bioRef = useRef<HTMLParagraphElement>(null)
+
+  useEffect(() => {
+    const el = bioRef.current
+    if (!el) return
+
+    // If reduced motion is preferred, show immediately
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setIsBioVisible(true)
+      return
+    }
+
+    if (!('IntersectionObserver' in window)) {
+      setIsBioVisible(true)
+      return
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsBioVisible(true)
+            observer.disconnect()
+          }
+        })
+      },
+      { threshold: 0.15 }
+    )
+
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
   return (
     <section id="background" className="relative overflow-hidden reveal transition-colors duration-300"
       style={{ background: 'var(--bg)', borderTop: '1px solid var(--border)' }}>
@@ -44,68 +157,58 @@ export default function Background() {
 
         <div className="relative flex flex-col md:flex-row md:items-start gap-y-12 md:gap-x-16 px-8 md:px-14 pb-24">
 
-          {/* Photo - 4:5 portrait, duotone tint, vertical caption, sticky while the text scrolls past */}
+          {/* Photo - Floating 3D Card, duotone tint, vertical caption, sticky while the text scrolls past */}
           <div className="w-full max-w-[260px] md:max-w-none md:w-[320px] flex-none relative mx-auto md:mx-0 md:sticky md:top-28">
-            <div className="relative w-full mx-auto md:mx-0" style={{ aspectRatio: '4 / 5' }}>
-              <div className="relative w-full h-full overflow-hidden flex flex-col items-center justify-center gap-4 text-center rounded-[2px]"
-                style={{ background: 'linear-gradient(160deg,#12122a 0%,#0a0a16 55%,#050508 100%)' }}>
-                <img
-                  src="/profile.png"
-                  alt="Warren"
-                  className="w-full h-full object-cover object-top"
-                  onError={(e) => {
-                    // Hide broken image icon and show placeholder if profile.jpg is not found yet
-                    (e.target as HTMLImageElement).style.display = 'none';
-                    const parent = (e.target as HTMLImageElement).parentElement;
-                    if (parent) {
-                      const placeholder = parent.querySelector('.photo-placeholder');
-                      if (placeholder) (placeholder as HTMLElement).style.display = 'flex';
-                    }
-                  }}
-                />
-                <div className="photo-placeholder hidden absolute inset-0 flex-col items-center justify-center gap-4 px-8">
-                  <div className="absolute inset-0" style={{
-                    mixBlendMode: 'overlay',
-                    background: 'linear-gradient(205deg, rgba(200,245,58,.22), transparent 55%)'
-                  }} />
-                  <div style={{
-                    fontFamily: '"Playfair Display",serif', fontSize: '74px', fontWeight: 700,
-                    fontStyle: 'italic', color: 'var(--accent)', opacity: .14, position: 'relative'
-                  }}>
-                  </div>
-                  <div className="relative text-[9px] tracking-[.2em] uppercase" style={{ color: 'var(--muted)', fontFamily: 'DM Mono,monospace' }}>
-                    Add profile.jpg to public folder
-                  </div>
-                  <div className="relative text-[8px] tracking-[.1em]" style={{ color: 'rgba(248,245,240,.18)', fontFamily: 'DM Mono,monospace' }}>
-                    4:5 portrait recommended
-                  </div>
-                </div>
-              </div>
-
-              <span className="absolute -top-px -left-px w-3 h-3" style={{ borderTop: '1px solid var(--accent)', borderLeft: '1px solid var(--accent)' }} />
-              <span className="absolute -bottom-px -right-px w-3 h-3" style={{ borderBottom: '1px solid var(--accent)', borderRight: '1px solid var(--accent)' }} />
-
-              <div className="hidden md:flex absolute top-0 -right-8 h-full items-center">
-                <span style={{
-                  writingMode: 'vertical-rl', fontFamily: 'DM Mono,monospace', fontSize: '9px',
-                  letterSpacing: '.22em', color: 'var(--muted)', textTransform: 'uppercase'
-                }}>
-                  Warren <span style={{ color: 'var(--accent)' }}>·</span> Jakarta <span style={{ color: 'var(--accent)' }}>·</span> 01
-                </span>
-              </div>
-            </div>
+            <ProfileCard3D />
           </div>
 
           {/* Bio + stat ticker + skills list */}
           <div className="flex-1 min-w-0">
-            {/* Extended Bio Text filling full horizontal space */}
-            <p className="text-[15.5px] md:text-[16px] leading-[1.95] font-light mb-10 w-full transition-colors duration-300" style={{ color: 'var(--bio-text)' }}>
-              <span style={{
-                fontFamily: '"Playfair Display",serif', fontSize: '3.4rem', fontWeight: 700,
-                float: 'left', lineHeight: .76, marginRight: '11px', marginTop: '4px', color: 'var(--accent)'
-              }}>
+            {/* Extended Bio Text with word-by-word fade-in animation */}
+            <p
+              ref={bioRef}
+              className="text-[15.5px] md:text-[16px] leading-[1.95] font-light mb-10 w-full transition-colors duration-300"
+              style={{ color: 'var(--bio-text)' }}
+            >
+              <span
+                style={{
+                  fontFamily: '"Playfair Display",serif',
+                  fontSize: '3.4rem',
+                  fontWeight: 700,
+                  float: 'left',
+                  lineHeight: 0.76,
+                  marginRight: '11px',
+                  marginTop: '4px',
+                  color: 'var(--accent)',
+                  opacity: isBioVisible ? 1 : 0,
+                  transform: isBioVisible ? 'translateY(0)' : 'translateY(6px)',
+                  filter: isBioVisible ? 'blur(0px)' : 'blur(4px)',
+                  transition: 'opacity 0.4s ease-out 0ms, transform 0.4s ease-out 0ms, filter 0.4s ease-out 0ms',
+                }}
+              >
                 I
-              </span>'m a <strong className="font-medium" style={{ color: 'var(--fg)' }}>Computer Science student</strong> who loves building products end-to-end - from database schema design and REST/GraphQL APIs to polished, accessible frontends. I care as much about code quality as the final product. My focus is <strong className="font-medium" style={{ color: 'var(--fg)' }}>full-stack web development</strong> and <strong className="font-medium" style={{ color: 'var(--fg)' }}>artificial intelligence</strong>, with a specialization in intelligent systems. I am comfortable owning an entire feature solo: architecture, implementation, testing, deployment. Currently seeking <strong className="font-medium" style={{ color: 'var(--fg)' }}>internship or part-time roles</strong> where I can ship real things and grow fast.
+              </span>
+              {BIO_WORDS.map((item, index) => {
+                const delay = 35 + index * 26
+                return (
+                  <span key={index}>
+                    <span
+                      className={`inline-block ${item.bold ? 'font-medium' : ''}`}
+                      style={{
+                        color: item.bold ? 'var(--fg)' : undefined,
+                        opacity: isBioVisible ? 1 : 0,
+                        transform: isBioVisible ? 'translateY(0)' : 'translateY(4px)',
+                        filter: isBioVisible ? 'blur(0px)' : 'blur(3px)',
+                        transition: `opacity 0.32s cubic-bezier(0.2, 0.65, 0.3, 0.9) ${delay}ms, transform 0.32s cubic-bezier(0.2, 0.65, 0.3, 0.9) ${delay}ms, filter 0.32s cubic-bezier(0.2, 0.65, 0.3, 0.9) ${delay}ms`,
+                        willChange: isBioVisible ? 'auto' : 'opacity, transform, filter',
+                      }}
+                    >
+                      {item.text}
+                    </span>
+                    {' '}
+                  </span>
+                )
+              })}
             </p>
 
             {/* Stat ticker */}
