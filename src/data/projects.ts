@@ -46,6 +46,15 @@ export const PROJECTS: Project[] = [
     demo: '#',
   },
   {
+    name: 'Aeroluxe',
+    desc: 'Luxury private aviation landing page featuring cinematic scroll-driven canvas animations, real-time timezone tracking, and an interactive private jet fleet showcase.',
+    stack: ['React', 'Tailwind CSS', 'Trending'],
+    status: 'live',
+    image: '/projects/aeroluxe.png',
+    github: 'https://github.com/WarrenBillTT/Aeroluxe',
+    demo: 'https://aeroluxe-wb.vercel.app/',
+  },
+  {
     name: 'Portfolio V1',
     desc: 'An interactive personal portfolio built with React and Three.js, showcasing work experience and projects with 3D animations and smooth transitions.',
     stack: ['React', 'Tailwind CSS', 'Three.js'],
@@ -61,7 +70,7 @@ export const PROJECTS: Project[] = [
     status: 'live',
     image: '/projects/iphone.png',
     github: 'https://github.com/WarrenBillTT/Iphone',
-    demo: '#',
+    demo: 'https://iphone-wb.vercel.app/',
   },
   {
     name: 'HISHOT 2026',
@@ -80,5 +89,14 @@ export const PROJECTS: Project[] = [
     image: '/projects/techno.png',
     github: 'https://github.com/HIMTI-Binus-University/TECHNO-2026',
     demo: 'https://techno.himtibinus.or.id/',
+  },
+  {
+    name: 'FloodPredix',
+    desc: 'Smart IoT & AI-powered flood detection platform providing real-time rainfall analysis, predictive flood hazard alerts, and sensor telemetry monitoring.',
+    stack: ['React', 'Tailwind CSS', 'IoT', 'ML'],
+    status: 'live',
+    image: '/projects/flood-predix.png',
+    github: 'https://github.com/WarrenBillTT/FloodPredix',
+    demo: '#',
   },
 ]

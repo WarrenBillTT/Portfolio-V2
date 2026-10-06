@@ -86,16 +86,16 @@ export default function Hero() {
           <span className="w-6 h-px" style={{ background:'var(--accent)', opacity:.6 }} />
         </div>
 
-        {/* Title - only this wrapper gets difference blend */}
+        {/* Title - only this wrapper gets difference blend in dark mode */}
         <div className="title-blend w-full">
-          <h1 style={{ fontFamily:'"Playfair Display",serif', fontWeight:700, letterSpacing:'-.02em', color:'#fff' }}>
+          <h1 style={{ fontFamily:'"Playfair Display",serif', fontWeight:700, letterSpacing:'-.02em', color:'var(--title-color)' }}>
             <span className="anim-slide block"
                   style={{ fontSize:'clamp(3.8rem,10vw,9.5rem)', lineHeight:.9 }}>
               WARREN
             </span>
             <span className="anim-fade block"
                   style={{ fontSize:'clamp(.9rem,1.8vw,1.5rem)', fontStyle:'italic',
-                           fontWeight:400, color:'#c8f53a', lineHeight:2.2, letterSpacing:'.1em' }}>
+                           fontWeight:400, color:'var(--accent)', lineHeight:2.2, letterSpacing:'.1em' }}>
               is
             </span>
             <div ref={wrapRef} className="cycle-wrap anim-slide-2 relative block"
@@ -114,8 +114,8 @@ export default function Hero() {
 
         <div className="anim-fade-3 flex flex-wrap justify-center gap-2 mt-5">
           {['React','Node.js','TypeScript','PostgreSQL','Docker'].map(t => (
-            <span key={t} className="text-[10px] tracking-[.06em] px-3 py-1 rounded-[3px]"
-                  style={{ background:'rgba(200,245,58,.07)', border:'1px solid rgba(200,245,58,.18)', color:'rgba(200,245,58,.7)', fontFamily:'DM Mono,monospace' }}>
+            <span key={t} className="text-[10px] tracking-[.06em] px-3 py-1 rounded-[3px] transition-colors"
+                  style={{ background:'var(--badge-bg)', border:'1px solid var(--badge-border)', color:'var(--badge-fg)', fontFamily:'DM Mono,monospace' }}>
               {t}
             </span>
           ))}
@@ -124,12 +124,12 @@ export default function Hero() {
         <div className="anim-fade-4 flex gap-3 mt-7 pointer-events-auto">
           <a href="#projects"
              className="px-6 py-3 rounded-[5px] text-[12px] font-semibold tracking-[.06em] uppercase no-underline transition-all hover:opacity-85 hover:-translate-y-0.5"
-             style={{ background:'var(--accent)', color:'var(--black)', fontFamily:'DM Mono,monospace' }}>
+             style={{ background:'var(--accent)', color:'var(--accent-fg)', fontFamily:'DM Mono,monospace' }}>
             View Projects ↓
           </a>
           <a href="#contact"
-             className="px-6 py-3 rounded-[5px] text-[12px] tracking-[.06em] uppercase no-underline transition-all hover:text-white hover:-translate-y-0.5"
-             style={{ background:'transparent', color:'var(--muted)', border:'1px solid var(--border)', fontFamily:'DM Mono,monospace' }}>
+             className="px-6 py-3 rounded-[5px] text-[12px] tracking-[.06em] uppercase no-underline transition-all hover:opacity-80 hover:-translate-y-0.5"
+             style={{ background:'transparent', color:'var(--fg)', border:'1px solid var(--border)', fontFamily:'DM Mono,monospace' }}>
             Get In Touch →
           </a>
         </div>

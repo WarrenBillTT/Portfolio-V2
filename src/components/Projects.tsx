@@ -75,34 +75,84 @@ export default function Projects() {
       s.drag = false; wrap.style.cursor = 'grab'
       s.tOff = Math.round(s.tOff / CSTEP) * CSTEP
     }
-    const onTStart = (e: TouchEvent) => { s.drag=true; s.dX=e.touches[0].clientX; s.dOff=s.tOff }
-    const onTMove  = (e: TouchEvent) => { if(!s.drag)return; s.tOff=s.dOff+(e.touches[0].clientX-s.dX) }
-    const onTEnd   = () => { s.drag=false; s.tOff=Math.round(s.tOff/CSTEP)*CSTEP }
+    // Touch drag with vertical scroll detection so mobile page scroll is never blocked
+    let touchStartX = 0
+    let touchStartY = 0
+    let isHorizontalTouch = false
+    let isTrackingTouch = false
+
+    const onTStart = (e: TouchEvent) => {
+      if (e.touches.length !== 1) return
+      touchStartX = e.touches[0].clientX
+      touchStartY = e.touches[0].clientY
+      s.dX = touchStartX
+      s.dOff = s.tOff
+      isHorizontalTouch = false
+      isTrackingTouch = true
+    }
+
+    const onTMove = (e: TouchEvent) => {
+      if (!isTrackingTouch) return
+      const curX = e.touches[0].clientX
+      const curY = e.touches[0].clientY
+      const dx = curX - touchStartX
+      const dy = curY - touchStartY
+
+      // Detect if user is swiping horizontally or scrolling vertically
+      if (!s.drag && !isHorizontalTouch) {
+        if (Math.abs(dx) > 10 && Math.abs(dx) > Math.abs(dy)) {
+          // Horizontal intent: engage carousel drag
+          isHorizontalTouch = true
+          s.drag = true
+          s.dX = curX
+        } else if (Math.abs(dy) > 10) {
+          // Vertical intent: release and let native browser scroll smoothly
+          isTrackingTouch = false
+          s.drag = false
+          return
+        }
+      }
+
+      if (s.drag) {
+        s.tOff = s.dOff + (curX - s.dX)
+      }
+    }
+
+    const onTEnd = () => {
+      isTrackingTouch = false
+      if (s.drag) {
+        s.drag = false
+        s.tOff = Math.round(s.tOff / CSTEP) * CSTEP
+      }
+    }
 
     wrap.addEventListener('mousedown', onDown)
     window.addEventListener('mousemove', onMove)
     window.addEventListener('mouseup', onUp)
     wrap.addEventListener('touchstart', onTStart, { passive: true })
     wrap.addEventListener('touchmove',  onTMove,  { passive: true })
-    wrap.addEventListener('touchend',   onTEnd)
+    wrap.addEventListener('touchend',   onTEnd,   { passive: true })
 
     return () => {
       cancelAnimationFrame(raf)
       wrap.removeEventListener('mousedown', onDown)
       window.removeEventListener('mousemove', onMove)
       window.removeEventListener('mouseup', onUp)
+      wrap.removeEventListener('touchstart', onTStart)
+      wrap.removeEventListener('touchmove',  onTMove)
+      wrap.removeEventListener('touchend',   onTEnd)
     }
   }, [copies, home, setWidth])
 
   return (
-    <section id="projects" className="overflow-hidden py-20" style={{ background:'#0a0a0a' }}>
+    <section id="projects" className="overflow-hidden py-20 transition-colors duration-300" style={{ background:'var(--bg)', borderTop:'1px solid var(--border)' }}>
       <div className="flex justify-between items-end px-10 mb-14 reveal">
         <div>
           <div className="text-[10px] tracking-[.25em] uppercase mb-1.5" style={{ color:'var(--muted)', fontFamily:'DM Mono,monospace' }}>
             Featured Work
           </div>
           <h2 style={{ fontFamily:'"Playfair Display",serif', fontSize:'clamp(1.6rem,3vw,2.4rem)',
-                       fontWeight:700, color:'var(--white)', letterSpacing:'-.02em' }}>
+                       fontWeight:700, color:'var(--fg)', letterSpacing:'-.02em' }}>
             Projects I've Built
           </h2>
         </div>
@@ -112,7 +162,7 @@ export default function Projects() {
         </p>
       </div>
 
-      <div ref={wrapRef} className="overflow-hidden py-5 pb-10" style={{ cursor:'grab', userSelect:'none' }}>
+      <div ref={wrapRef} className="overflow-hidden py-5 pb-10" style={{ cursor:'grab', userSelect:'none', touchAction:'pan-y' }}>
         <div ref={trackRef} className="cards-track">
           {ALL.map((p, i) => (
             <ProjectCard key={`${p.name}-${i}`} project={p} index={i % PROJECTS.length} total={PROJECTS.length} />

@@ -5,14 +5,18 @@ import Projects   from './components/Projects'
 import Background from './components/Background'
 import Contact    from './components/Contact'
 import { useReveal } from './hooks/useReveal'
+import { ThemeProvider } from './hooks/useTheme'
 import './index.css'
 
-/* ── Custom cursor ── */
+/* ── Custom cursor (Desktop only, completely disabled on touch devices) ── */
 function Cursor() {
   const dotRef  = useRef<HTMLDivElement>(null)
   const ringRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
+    // Disable on touch devices to ensure smooth native scrolling
+    if (typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches) return
+
     let cx = 0, cy = 0, rx = 0, ry = 0, raf: number
     const onMove = (e: MouseEvent) => {
       cx = e.clientX; cy = e.clientY
@@ -30,7 +34,7 @@ function Cursor() {
       }
       raf = requestAnimationFrame(loop)
     }
-    document.addEventListener('mousemove', onMove)
+    document.addEventListener('mousemove', onMove, { passive: true })
     raf = requestAnimationFrame(loop)
 
     const add = () => dotRef.current?.classList.add('hov')
@@ -51,8 +55,8 @@ function Cursor() {
 
   return (
     <>
-      <div ref={dotRef}  className="cur" />
-      <div ref={ringRef} className="cur-r" />
+      <div ref={dotRef}  className="cur hidden md:block" />
+      <div ref={ringRef} className="cur-r hidden md:block" />
     </>
   )
 }
@@ -74,7 +78,7 @@ function Footer() {
 
   return (
     <footer
-      className="flex justify-between items-center px-10 py-8"
+      className="flex justify-between items-center px-10 py-8 transition-colors duration-300"
       style={{
         background:    'var(--black)',
         borderTop:     '1px solid var(--border)',
@@ -97,7 +101,7 @@ export default function App() {
   useReveal()
 
   return (
-    <>
+    <ThemeProvider>
       <Cursor />
       <Nav />
       <main>
@@ -107,6 +111,6 @@ export default function App() {
         <Contact />
       </main>
       <Footer />
-    </>
+    </ThemeProvider>
   )
 }
