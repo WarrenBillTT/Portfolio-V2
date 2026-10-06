@@ -2,6 +2,8 @@
 
 A minimalist, typography-driven personal portfolio built with **React**, **TypeScript**, and **Vite**. Features a custom cursor, animated hero text, a canvas-based blob background, and a scroll-reveal project showcase.
 
+![Image](https://github.com/WarrenBillTT/Portfolio-V2/blob/main/preview.png)
+
 🔗 **Live Demo:** https://portfolio-warrenbill.vercel.app/
 
 ![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)
