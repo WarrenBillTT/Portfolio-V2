@@ -99,4 +99,13 @@ export const PROJECTS: Project[] = [
     github: 'https://github.com/WarrenBillTT/FloodPredix',
     demo: '#',
   },
+  {
+    name: 'Wérisan Rasa',
+    desc: 'A traditional Indonesian heritage F&B brand identity, featuring custom packaging design and a curated Instagram visual campaign.',
+    stack: ['React', 'Tailwind CSS', 'Motion'],
+    status: 'live',
+    image: '/projects/werisan.png',
+    github: 'https://github.com/WarrenBillTT/Werisan-Rasa',
+    demo: 'https://werisan-rasa.vercel.app/',
+  }
 ]
